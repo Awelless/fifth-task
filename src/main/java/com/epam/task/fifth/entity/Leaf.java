@@ -1,14 +1,16 @@
 package com.epam.task.fifth.entity;
 
+import com.epam.task.fifth.entity.lexeme.Lexeme;
+
 public class Leaf implements Component {
 
-    private final String lexeme;
+    private final Lexeme lexeme;
 
-    public Leaf(String lexeme) {
+    public Leaf(Lexeme lexeme) {
         this.lexeme = lexeme;
     }
 
-    public String getLexeme() {
+    public Lexeme getLexeme() {
         return lexeme;
     }
 
