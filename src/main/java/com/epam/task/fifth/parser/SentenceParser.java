@@ -18,58 +18,58 @@ public class SentenceParser extends ChainParser {
     @Override
     public Component parse(String text) {
 
-        String[] words = text.split(SPLITERATOR);
+        String[] lexemes = text.split(SPLITERATOR);
 
-        List<String> newWords = updateWords(words);
+        List<String> rebuildedLexemes = rebuildLexemes(lexemes);
 
         Parser successor = getSuccessor();
 
-        List<Component> components = newWords.stream()
+        List<Component> components = rebuildedLexemes.stream()
                 .map(successor::parse)
                 .collect(Collectors.toList());
 
         return new Composite(components);
     }
 
-    private List<String> updateWords(String[] words) {
+    private List<String> rebuildLexemes(String[] lexemes) {
 
-        List<String> newWords = new ArrayList<>();
+        List<String> rebuildedLexemes = new ArrayList<>();
 
         boolean isExpression = false;
         StringBuilder expressionBuilder = new StringBuilder();
 
-        for (String word : words) {
+        for (String lexeme : lexemes) {
 
-            if (word.charAt(0) == '[') {
+            if (lexeme.charAt(0) == '[') {
                 isExpression = true;
 
-                if (word.length() > 1) {
-                    expressionBuilder.append(word);
+                if (lexeme.length() > 1) {
+                    expressionBuilder.append(lexeme);
                 }
 
-                if (word.charAt(word.length() - 1) == ']') {
+                if (lexeme.charAt(lexeme.length() - 1) == ']') {
                     String expression = expressionBuilder.toString();
 
-                    newWords.add(expression);
+                    rebuildedLexemes.add(expression);
 
                     isExpression = false;
                 }
-            } else if (word.charAt(word.length() - 1) == ']') {
-                expressionBuilder.append(" ").append(word);
+            } else if (lexeme.charAt(lexeme.length() - 1) == ']') {
+                expressionBuilder.append(" ").append(lexeme);
                 String expression = expressionBuilder.toString();
 
-                newWords.add(expression);
+                rebuildedLexemes.add(expression);
 
                 isExpression = false;
             } else {
                 if (isExpression) {
-                    expressionBuilder.append(" ").append(word);
+                    expressionBuilder.append(" ").append(lexeme);
                 } else {
-                    newWords.add(word);
+                    rebuildedLexemes.add(lexeme);
                 }
             }
         }
 
-        return newWords;
+        return rebuildedLexemes;
     }
 }
