@@ -1,16 +1,17 @@
 package com.epam.task.fifth.entity;
 
-import com.epam.task.fifth.entity.lexeme.Lexeme;
-
 public class Leaf implements Component {
 
-    private final Lexeme lexeme;
+    private final LeafType type;
 
-    public Leaf(Lexeme lexeme) {
+    private final String lexeme;
+
+    public Leaf(LeafType type, String lexeme) {
+        this.type = type;
         this.lexeme = lexeme;
     }
 
-    public Lexeme getLexeme() {
+    public String getLexeme() {
         return lexeme;
     }
 
@@ -25,12 +26,12 @@ public class Leaf implements Component {
         }
 
         Leaf leaf = (Leaf) o;
-        return lexeme.equals(leaf.lexeme);
+        return lexeme.equals(leaf.lexeme) && type.equals(leaf.type);
     }
 
     @Override
     public int hashCode() {
-        return lexeme.hashCode();
+        return 31 * lexeme.hashCode() + type.hashCode();
     }
 
     @Override

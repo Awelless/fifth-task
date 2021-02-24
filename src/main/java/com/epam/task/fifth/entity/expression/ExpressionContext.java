@@ -1,12 +1,12 @@
-package com.epam.task.fifth.entity.lexeme.expression;
+package com.epam.task.fifth.entity.expression;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
 
 public class ExpressionContext {
 
-    private final Stack<NonTerminalExpression> expressions = new Stack<>();
+    private final ArrayDeque<NonTerminalExpression> expressions = new ArrayDeque<>();
 
-    public NonTerminalExpression get() {
+    public NonTerminalExpression pop() {
         return expressions.pop();
     }
 

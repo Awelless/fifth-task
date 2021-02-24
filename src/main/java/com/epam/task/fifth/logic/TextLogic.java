@@ -3,7 +3,6 @@ package com.epam.task.fifth.logic;
 import com.epam.task.fifth.entity.Component;
 import com.epam.task.fifth.entity.Composite;
 import com.epam.task.fifth.entity.Leaf;
-import com.epam.task.fifth.entity.lexeme.Lexeme;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +15,12 @@ public class TextLogic {
 
         List<Component> childrenToSort = new ArrayList<>(children);
 
-        childrenToSort.sort((a, b) -> {
+        childrenToSort.sort((first, second) -> {
             //all children of text are paragraphs, so we can upcast them to Composite
-            List<Component> aChildren = ((Composite) a).getChildren();
-            List<Component> bChildren = ((Composite) b).getChildren();
+            List<Component> firstChildren = ((Composite) first).getChildren();
+            List<Component> secondChildren = ((Composite) second).getChildren();
 
-            return aChildren.size() - bChildren.size();
+            return firstChildren.size() - secondChildren.size();
         });
 
         return new Composite(childrenToSort);
@@ -33,15 +32,12 @@ public class TextLogic {
 
         List<Component> childrenToSort = new ArrayList<>(children);
 
-        childrenToSort.sort((a, b) -> {
+        childrenToSort.sort((first, second) -> {
             //all children of sentence are lexemes, so we can upcast them to Leaf
-            Lexeme aLexeme = ((Leaf) a).getLexeme();
-            Lexeme bLexeme = ((Leaf) b).getLexeme();
+            String firstLexeme = ((Leaf) first).getLexeme();
+            String secondLexeme = ((Leaf) second).getLexeme();
 
-            String aLexemeValue = aLexeme.getValue();
-            String bLexemeValue = bLexeme.getValue();
-
-            return aLexemeValue.length() - bLexemeValue.length();
+            return firstLexeme.length() - secondLexeme.length();
         });
 
         return new Composite(childrenToSort);

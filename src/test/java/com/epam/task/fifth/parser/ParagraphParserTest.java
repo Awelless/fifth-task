@@ -3,7 +3,7 @@ package com.epam.task.fifth.parser;
 import com.epam.task.fifth.entity.Component;
 import com.epam.task.fifth.entity.Composite;
 import com.epam.task.fifth.entity.Leaf;
-import com.epam.task.fifth.entity.lexeme.Word;
+import com.epam.task.fifth.entity.LeafType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -29,14 +29,14 @@ public class ParagraphParserTest {
 
         Component firstSentence = new Composite(
                 Arrays.asList(
-                        new Leaf(new Word("A")),
-                        new Leaf(new Word("asd"))
+                        new Leaf(LeafType.WORD, "A"),
+                        new Leaf(LeafType.WORD, "asd")
                 )
         );
 
         Component secondSentence = new Composite(
                 Collections.singletonList(
-                        new Leaf(new Word("B"))
+                        new Leaf(LeafType.WORD, "B")
                 )
         );
 

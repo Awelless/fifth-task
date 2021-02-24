@@ -1,4 +1,4 @@
-package com.epam.task.fifth.entity.lexeme.expression;
+package com.epam.task.fifth.entity.expression;
 
 public interface AbstractExpression {
     void interpret(ExpressionContext expressionContext);

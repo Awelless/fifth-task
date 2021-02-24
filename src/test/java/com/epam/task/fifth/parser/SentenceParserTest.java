@@ -3,13 +3,11 @@ package com.epam.task.fifth.parser;
 import com.epam.task.fifth.entity.Component;
 import com.epam.task.fifth.entity.Composite;
 import com.epam.task.fifth.entity.Leaf;
-import com.epam.task.fifth.entity.lexeme.MathExpression;
-import com.epam.task.fifth.entity.lexeme.Word;
+import com.epam.task.fifth.entity.LeafType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.mockito.Mockito.*;
@@ -21,15 +19,15 @@ public class SentenceParserTest {
     private final Parser sentenceParser = new SentenceParser(lexemeParser);
 
     @Test
-    public void test() {
+    public void testParse() {
         //given
         String firstLexemeText = "A";
         String secondLexemeText = "[5 3 +]";
 
         String text = firstLexemeText + " " + secondLexemeText;
 
-        Component firstLexeme = new Leaf(new Word("A"));
-        Component secondLexeme = new Leaf(new MathExpression("[5 3 +]", new ArrayList<>()));
+        Component firstLexeme = new Leaf(LeafType.WORD, "A");
+        Component secondLexeme = new Leaf(LeafType.MATH_EXPRESSION, "[5 3 +]");
 
         Component expected = new Composite(Arrays.asList(firstLexeme, secondLexeme));
 

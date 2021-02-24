@@ -3,7 +3,7 @@ package com.epam.task.fifth.logic;
 import com.epam.task.fifth.entity.Component;
 import com.epam.task.fifth.entity.Composite;
 import com.epam.task.fifth.entity.Leaf;
-import com.epam.task.fifth.entity.lexeme.Word;
+import com.epam.task.fifth.entity.LeafType;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,13 +21,13 @@ public class TextLogicTest {
                 Arrays.asList(
                         new Composite(
                                 Arrays.asList(
-                                        new Leaf(new Word("A")),
-                                        new Leaf(new Word("asd"))
+                                        new Leaf(LeafType.WORD, "A"),
+                                        new Leaf(LeafType.WORD, "asd")
                                 )
                         ),
                         new Composite(
                                 Collections.singletonList(
-                                        new Leaf(new Word("B"))
+                                        new Leaf(LeafType.WORD, "B")
                                 )
                         )
                 )
@@ -37,8 +37,8 @@ public class TextLogicTest {
                 Collections.singletonList(
                         new Composite(
                                 Arrays.asList(
-                                        new Leaf(new Word("Test")),
-                                        new Leaf(new Word("123"))
+                                        new Leaf(LeafType.WORD, "Test"),
+                                        new Leaf(LeafType.WORD, "123")
                                 )
                         )
                 )
@@ -46,10 +46,10 @@ public class TextLogicTest {
 
         Composite expected = new Composite(Arrays.asList(secondParagraph, firstParagraph));
 
-        Composite toSort = new Composite(Arrays.asList(firstParagraph, secondParagraph));
+        Composite unsortedParagraphs = new Composite(Arrays.asList(firstParagraph, secondParagraph));
 
         //when
-        Composite actual = textLogic.sortParagraphsByNumberOfSentences(toSort);
+        Composite actual = textLogic.sortParagraphsByNumberOfSentences(unsortedParagraphs);
 
         Assert.assertEquals(expected, actual);
     }
@@ -57,15 +57,15 @@ public class TextLogicTest {
     @Test
     public void testSortWordsByLength() {
         //given
-        Component firstLexeme = new Leaf(new Word("ashf"));
-        Component secondLexeme = new Leaf(new Word("A"));
+        Component firstLexeme = new Leaf(LeafType.WORD, "ashf");
+        Component secondLexeme = new Leaf(LeafType.WORD, "A");
 
         Composite expected = new Composite(Arrays.asList(secondLexeme, firstLexeme));
 
-        Composite toSort = new Composite(Arrays.asList(firstLexeme, secondLexeme));
+        Composite unsortedLexemes = new Composite(Arrays.asList(firstLexeme, secondLexeme));
 
         //when
-        Composite actual = textLogic.sortWordsByLength(toSort);
+        Composite actual = textLogic.sortWordsByLength(unsortedLexemes);
 
         Assert.assertEquals(expected, actual);
     }

@@ -3,71 +3,69 @@ package com.epam.task.fifth.parser;
 import com.epam.task.fifth.entity.Component;
 import com.epam.task.fifth.entity.Composite;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class SentenceParser extends ChainParser {
+public class SentenceParser extends AbstractParserWithSuccessor {
 
     private static final String SPLITERATOR = " +";
+
+    private static final String MATH_EXPRESSION_REGEX = "\\[.*]";
+    private static final Pattern MATH_EXPRESSION_PATTERN = Pattern.compile(MATH_EXPRESSION_REGEX);
 
     public SentenceParser(Parser successor) {
         super(successor);
     }
 
+    protected String getSpliterator() {
+        return SPLITERATOR;
+    }
+
     @Override
     public Component parse(String text) {
 
-        String[] lexemes = text.split(SPLITERATOR);
-
-        List<String> rebuildedLexemes = rebuildLexemes(lexemes);
+        List<String> lexemes = getLexemes(text);
 
         Parser successor = getSuccessor();
 
-        List<Component> components = rebuildedLexemes.stream()
+        List<Component> components = lexemes.stream()
                 .map(successor::parse)
                 .collect(Collectors.toList());
 
         return new Composite(components);
     }
 
-    private List<String> rebuildLexemes(String[] lexemes) {
+    private List<String> getLexemes(String text) {
+
+        StringBuilder textBuilder = new StringBuilder(text);
 
         List<String> rebuildedLexemes = new ArrayList<>();
 
-        boolean isExpression = false;
-        StringBuilder expressionBuilder = new StringBuilder();
+        Matcher matcher = MATH_EXPRESSION_PATTERN.matcher(textBuilder);
 
-        for (String lexeme : lexemes) {
+        while (matcher.find()) {
+            String expression = matcher.group();
 
-            if (lexeme.charAt(0) == '[') {
-                isExpression = true;
+            int expressionStart = matcher.start();
+            int expressionEnd = matcher.end();
 
-                if (lexeme.length() > 1) {
-                    expressionBuilder.append(lexeme);
-                }
+            String textBeforeExpression = textBuilder.substring(0, expressionStart);
 
-                if (lexeme.charAt(lexeme.length() - 1) == ']') {
-                    String expression = expressionBuilder.toString();
+            String[] words = textBeforeExpression.split(SPLITERATOR);
 
-                    rebuildedLexemes.add(expression);
+            rebuildedLexemes.addAll(Arrays.asList(words));
+            rebuildedLexemes.add(expression);
 
-                    isExpression = false;
-                }
-            } else if (lexeme.charAt(lexeme.length() - 1) == ']') {
-                expressionBuilder.append(" ").append(lexeme);
-                String expression = expressionBuilder.toString();
+            textBuilder.replace(0, expressionEnd, "");
+        }
 
-                rebuildedLexemes.add(expression);
+        String remainingText = textBuilder.toString();
 
-                isExpression = false;
-            } else {
-                if (isExpression) {
-                    expressionBuilder.append(" ").append(lexeme);
-                } else {
-                    rebuildedLexemes.add(lexeme);
-                }
-            }
+        if (remainingText.length() > 0 && !remainingText.matches(SPLITERATOR)) {
+            String[] words = remainingText.split(SPLITERATOR);
+            rebuildedLexemes.addAll(Arrays.asList(words));
         }
 
         return rebuildedLexemes;
